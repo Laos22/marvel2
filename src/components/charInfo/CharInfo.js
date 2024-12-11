@@ -1,80 +1,68 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import MarvelServices from '../../services/MarvelServices';
+import useMarvelServices from '../../services/MarvelServices';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import Spinner from '../spinner/Spinner';
 import Sceleton from '../skeleton/Skeleton';
 
 import './charInfo.scss';
 
-class CharInfo extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            char: null,
-            loading: false,
-            error: false,
-        };
+const CharInfo = ({charId}) => {
+
+    const [char, setChar] = useState(null);
+
+    // constructor(props) {
+    //     super(props);
+    //     this.state = {
+    //         char: null,
+    //         loading: false,
+    //         error: false,
+    //     };
+    // }
+
+    // eslint-disable-next-line 
+    useEffect(() => updateChar(), [charId]);
+
+    // componentDidUpdate(prevProps) {
+    //     if (this.props.charId !== prevProps.charId) {
+    //         this.updateChar();
+    //     }
+    // }
+
+
+    const {loading, error, getCaracter, clearError} = useMarvelServices();
+
+    const onCharLoaded = (char) => {
+        setChar(char);
     }
 
-    componentDidMount() {
-        // this.updateChar();
-    }
 
-    componentDidUpdate(prevProps) {
-        if (this.props.charId !== prevProps.charId) {
-            this.updateChar();
-        }
-    }
-
-    componentWillUnmount() {
-    }
-
-    marvelServices = new MarvelServices();
-
-    onCharLoaded = (char) => {
-        this.setState({ char, loading: false });
-    }
-
-    onError = () => {
-        this.setState({ error: true, loading: false });
-    }
-
-    onLoading = () => {
-        this.setState({ loading: true });
-    }
-
-    updateChar = () => {
-        const id = this.props.charId;
-
-        if (!id) {
+    const updateChar = () => {
+        if (!charId) {
             return;
         }
-        this.onLoading();
-        this.marvelServices
-            .getCaracter(id)
-            .then(this.onCharLoaded)
-            .catch(this.onError);
+        clearError();
+        getCaracter(charId)
+            .then(onCharLoaded);
     }
 
-    render() {
-        const { char, error, loading } = this.state;
+    
 
-        const sceleton = char || loading || error ? null : <Sceleton />;
-        const errorMessage = error ? <ErrorMessage /> : null;
-        const spinner = loading ? <Spinner /> : null;
-        const content = !(loading || error || sceleton) ? <View char={char} /> : null;
+    const sceleton = char || loading || error ? null : <Sceleton />;
+    const errorMessage = error ? <ErrorMessage /> : null;
+    const spinner = loading ? <Spinner /> : null;
+    const content = !(loading || error || sceleton) ? <View char={char} /> : null;
 
-        return (
-            <div className="char__info">
-                {sceleton}
-                {errorMessage}
-                {spinner}
-                {content}
-            </div>
-        );
-    }
+    return (
+        <div className="char__info">
+            {sceleton}
+            {errorMessage}
+            {spinner}
+            {content}
+        </div>
+    );
+    
 }
 
 class View extends Component {
