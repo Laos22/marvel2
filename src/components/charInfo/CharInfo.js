@@ -39,9 +39,7 @@ const CharInfo = ({charId}) => {
 
 
     const updateChar = () => {
-        if (!charId) {
-            return;
-        }
+        if (!charId) return;
         clearError();
         getCaracter(charId)
             .then(onCharLoaded);

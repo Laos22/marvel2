@@ -12,9 +12,11 @@ const  App = () => {
             <div className="app">
                 <AppHeader/>
                 <main>
-                    <MainPage/>
-                    <ComicsPage/>
-                    <SingleComicPage/>
+                    <Routes>
+                        <Route path='/' element={<MainPage/>} />
+                        <Route path='/comics' element={<ComicsPage/>} />
+                        <Route path='/comic/:id' element={<SingleComicPage/>} />
+                    </Routes>
                 </main>
             </div>
         </BrowserRouter>
