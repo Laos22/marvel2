@@ -1,7 +1,7 @@
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import AppHeader from "../appHeader/AppHeader";
-import MainPage from '../pages/MainPage';
+import {MainPage, ComicsPage} from '../pages';
 
 
 const  App = () => {
@@ -13,6 +13,7 @@ const  App = () => {
                 <AppHeader/>
                 <main>
                     <MainPage/>
+                    <ComicsPage/>
                 </main>
             </div>
         </BrowserRouter>
