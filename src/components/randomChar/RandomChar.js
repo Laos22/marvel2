@@ -16,16 +16,18 @@ const RandomChar = () => {
         wiki: null,
     });
 
-    const {loading, error, getCaracter} = useMarvelServices();
+    const {loading, error, getCaracter, clearError} = useMarvelServices();
 
     //eslint-disable-next-line
     useEffect(() => updateChar(), [])
 
     const onCharLoaded = (char) => {
+        clearError();
         setChar(char);
     }
 
     const updateChar = () => {
+        clearError();
         const id = Math.floor(Math.random() * (1011440 - 1011000) + 1011000);
         getCaracter(id).then(onCharLoaded);
     }
